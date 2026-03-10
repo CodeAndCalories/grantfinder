@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "grant-finder",
+      "runtimeExecutable": "node_modules/.bin/next.cmd",
+      "runtimeArgs": ["dev", "--port", "${PORT}"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
