@@ -7,22 +7,13 @@ import {
   getUniqueIndustries,
   getUniqueLocations,
   filterAndSortGrants,
-  formatCurrency,
   type SortOption,
 } from "@/lib/grants";
+import GrantCard from "@/components/GrantCard";
 
 const allGrants = getAllGrants();
 const industries = getUniqueIndustries();
 const locations = getUniqueLocations();
-
-function deadlineClass(deadline: string): string {
-  const today = new Date();
-  const d = new Date(deadline);
-  const days = Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  if (days <= 14) return "deadline-urgent";
-  if (days <= 45) return "deadline-soon";
-  return "";
-}
 
 export default function GrantsPage() {
   const [search, setSearch] = useState("");
@@ -60,7 +51,10 @@ export default function GrantsPage() {
   return (
     <>
       <h1 className="page-title">Government Grants</h1>
-      <p className="page-subtitle">Browse {allGrants.length} available grants</p>
+      <p className="page-subtitle">
+        Browse {allGrants.length} available grants &nbsp;|&nbsp;{" "}
+        <Link href="/saved">⭐ View Saved Grants</Link>
+      </p>
 
       {/* Search */}
       <div className="search-bar">
@@ -153,28 +147,7 @@ export default function GrantsPage() {
       ) : (
         <div className="grants-list">
           {results.map((grant) => (
-            <div className="grant-card" key={grant.id}>
-              <div className="grant-card-header">
-                <Link href={`/grants/${grant.id}`} className="grant-card-title">
-                  {grant.title}
-                </Link>
-                <span className="grant-amount">
-                  {formatCurrency(grant.funding_amount)}
-                </span>
-              </div>
-              <div className="grant-meta">
-                <span>📍 {grant.location}</span>
-                <span className={deadlineClass(grant.deadline)}>
-                  ⏰ Deadline: {new Date(grant.deadline).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                </span>
-              </div>
-              <p className="grant-description">{grant.description}</p>
-              <div className="tags">
-                {grant.industry_tags.map((tag) => (
-                  <span key={tag} className="tag">{tag}</span>
-                ))}
-              </div>
-            </div>
+            <GrantCard key={grant.id} grant={grant} />
           ))}
         </div>
       )}
