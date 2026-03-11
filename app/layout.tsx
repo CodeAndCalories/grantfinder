@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GrantFinder",
-  description: "Search government grants",
+  title: "GrantLocate",
+  description: "Government grants for businesses, nonprofits, research, and community projects",
 };
 
 export default function RootLayout({
