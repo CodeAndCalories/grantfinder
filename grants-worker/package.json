@@ -1,0 +1,17 @@
+{
+  "name": "grants-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "status": "curl https://grants-worker.YOUR-SUBDOMAIN.workers.dev/status"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16"
+  }
+}

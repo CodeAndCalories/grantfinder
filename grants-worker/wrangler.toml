@@ -1,0 +1,10 @@
+name = "grants-worker"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+# No cron trigger here — daily refresh is handled by GitHub Actions (free)
+# See .github/workflows/refresh-grants.yml
+
+[[kv_namespaces]]
+binding = "GRANTS_KV"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
