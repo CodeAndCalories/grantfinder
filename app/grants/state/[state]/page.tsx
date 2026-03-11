@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -13,13 +16,6 @@ function toSlug(state: string): string {
 
 function fromSlug(slug: string): string | undefined {
   return getUniqueLocations().find((l) => toSlug(l) === slug);
-}
-
-// ---------------------------------------------------------------------------
-// Static params — pre-render a page for every unique location
-// ---------------------------------------------------------------------------
-export function generateStaticParams() {
-  return getUniqueLocations().map((state) => ({ state: toSlug(state) }));
 }
 
 // ---------------------------------------------------------------------------

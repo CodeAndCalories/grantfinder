@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -22,29 +25,6 @@ function stateFromSlug(slug: string): string | undefined {
 
 function industryFromSlug(slug: string): string | undefined {
   return getUniqueIndustries().find((i) => toSlug(i) === slug);
-}
-
-// ---------------------------------------------------------------------------
-// Static params — every valid state × industry combination that has ≥1 grant
-// ---------------------------------------------------------------------------
-export function generateStaticParams() {
-  const grants = getAllGrants();
-  const seen = new Set<string>();
-  const params: { state: string; industry: string }[] = [];
-
-  for (const grant of grants) {
-    const stateSlug = toSlug(grant.location);
-    for (const tag of grant.industry_tags) {
-      const industrySlug = toSlug(tag);
-      const key = `${stateSlug}__${industrySlug}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        params.push({ state: stateSlug, industry: industrySlug });
-      }
-    }
-  }
-
-  return params;
 }
 
 // ---------------------------------------------------------------------------
@@ -192,9 +172,9 @@ export default async function StateIndustryPage({
         {/* Stat pills */}
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
           {[
-            { value: grants.length,             label: "Grants Available" },
-            { value: formatCurrency(avgFunding), label: "Avg. Award"       },
-            { value: formatCurrency(totalFunding), label: "Total Funding"  },
+            { value: grants.length,               label: "Grants Available" },
+            { value: formatCurrency(avgFunding),   label: "Avg. Award"       },
+            { value: formatCurrency(totalFunding), label: "Total Funding"    },
           ].map(({ value, label }) => (
             <div
               key={label}
