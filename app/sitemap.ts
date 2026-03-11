@@ -32,11 +32,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: LAST_MODIFIED,
   }));
 
+  // State + industry combo pages — /grants/state/[state]/[industry]
+  const seen = new Set<string>();
+  const comboPages: MetadataRoute.Sitemap = [];
+  for (const grant of grants) {
+    const stateSlug = toSlug(grant.location);
+    for (const tag of grant.industry_tags) {
+      const industrySlug = toSlug(tag);
+      const key = `${stateSlug}__${industrySlug}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        comboPages.push({
+          url: `${BASE_URL}/grants/state/${stateSlug}/${industrySlug}`,
+          lastModified: LAST_MODIFIED,
+        });
+      }
+    }
+  }
+
   // Individual grant pages — /grants/[id]
   const grantPages: MetadataRoute.Sitemap = grants.map((grant) => ({
     url: `${BASE_URL}/grants/${grant.id}`,
     lastModified: LAST_MODIFIED,
   }));
 
-  return [...staticPages, ...industryPages, ...statePages, ...grantPages];
+  return [...staticPages, ...industryPages, ...statePages, ...comboPages, ...grantPages];
 }
