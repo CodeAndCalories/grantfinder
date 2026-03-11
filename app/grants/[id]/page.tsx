@@ -6,6 +6,7 @@ import { getGrantById, getAllGrants, formatCurrency } from "@/lib/grants";
 // This prevents pre-rendering 500+ pages at build time which caused
 // the Cloudflare adapter to hit its manifest string length limit.
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
