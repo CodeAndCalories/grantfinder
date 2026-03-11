@@ -14,6 +14,59 @@ function deadlineClass(deadline: string): string {
   return "";
 }
 
+function deadlineDays(deadline: string): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const d = new Date(deadline);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+interface BadgeStyle {
+  background: string;
+  color: string;
+  label: string;
+}
+
+function DeadlineBadge({ deadline }: { deadline: string }) {
+  const days = deadlineDays(deadline);
+
+  let style: BadgeStyle;
+  if (days < 0) {
+    style = { background: "#f1f5f9", color: "#64748b", label: "Deadline passed" };
+  } else if (days === 0) {
+    style = { background: "#fef2f2", color: "#dc2626", label: "Deadline today" };
+  } else if (days === 1) {
+    style = { background: "#fff7ed", color: "#ea580c", label: "Deadline tomorrow" };
+  } else if (days <= 14) {
+    style = { background: "#fef2f2", color: "#dc2626", label: `Deadline in ${days} days` };
+  } else if (days <= 45) {
+    style = { background: "#fffbeb", color: "#d97706", label: `Deadline in ${days} days` };
+  } else {
+    style = { background: "#f0fdf4", color: "#16a34a", label: `Deadline in ${days} days` };
+  }
+
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        fontSize: "0.7rem",
+        fontWeight: 600,
+        letterSpacing: "0.02em",
+        padding: "0.15rem 0.5rem",
+        borderRadius: "999px",
+        background: style.background,
+        color: style.color,
+        verticalAlign: "middle",
+        marginLeft: "0.4rem",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {style.label}
+    </span>
+  );
+}
+
 interface GrantCardProps {
   grant: Grant;
   onUnsave?: (id: string) => void; // optional: called after unsaving (for saved page)
@@ -75,6 +128,7 @@ export default function GrantCard({ grant, onUnsave }: GrantCardProps) {
             day: "numeric",
             year: "numeric",
           })}
+          <DeadlineBadge deadline={grant.deadline} />
         </span>
       </div>
 
