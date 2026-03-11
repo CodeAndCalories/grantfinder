@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SiteNav from "@/components/SiteNav";
 
 export const metadata: Metadata = {
   title: "GrantLocate | Find Government Grants for Businesses and Nonprofits",
@@ -17,9 +18,7 @@ export default function RootLayout({
         <header>
           <div className="header-inner">
             <a href="/grants" className="logo">GrantLocate</a>
-            <nav>
-              <a href="/grants">Browse Grants</a>
-            </nav>
+            <SiteNav />
           </div>
         </header>
         <main>{children}</main>
