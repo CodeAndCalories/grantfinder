@@ -68,14 +68,22 @@ export default function StudentGrantsPage() {
           color: "#fff",
         }}
       >
-        <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🎓</div>
-        <h1 style={{ fontSize: "2rem", fontWeight: 800, margin: "0 0 0.75rem" }}>
-          Student &amp; Education Grants
-        </h1>
-        <p style={{ maxWidth: "600px", opacity: 0.9, margin: "0 0 1.5rem", lineHeight: 1.6 }}>
-          Find government and education grants for college students, graduate students, and research
-          programs. All grants are sourced from federal, state, and local programs.
-        </p>
+  <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🎓</div>
+
+  <h1 style={{ fontSize: "2rem", fontWeight: 800, margin: "0 0 0.75rem" }}>
+    Student &amp; College Grants
+  </h1>
+
+  <p style={{ maxWidth: "600px", opacity: 0.9, margin: "0 0 1rem", lineHeight: 1.6 }}>
+    Find government and education grants for college students, graduate students,
+    and research programs. All grants are sourced from federal, state, and local programs.
+  </p>
+
+  <p style={{ maxWidth: "600px", opacity: 0.85, margin: "0 0 1.5rem", lineHeight: 1.6 }}>
+    Student grants help cover tuition, research funding, and academic programs across
+    universities and colleges. Browse federal, state, and education grants available
+    for undergraduate and graduate students throughout the United States.
+  </p>
 
         {/* Stat pills */}
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
