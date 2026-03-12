@@ -8,12 +8,22 @@ import {
   getUniqueLocations,
   filterAndSortGrants,
   type SortOption,
+  type ProgramType,
+  PROGRAM_TYPE_LABELS,
 } from "@/lib/grants";
 import GrantCard from "@/components/GrantCard";
 
 const allGrants = getAllGrants();
 const industries = getUniqueIndustries();
 const locations = getUniqueLocations();
+
+const PROGRAM_TYPE_OPTIONS: { value: ProgramType | ""; label: string }[] = [
+  { value: "", label: "All program types" },
+  { value: "grant", label: PROGRAM_TYPE_LABELS.grant },
+  { value: "relief_fund", label: PROGRAM_TYPE_LABELS.relief_fund },
+  { value: "assistance_program", label: PROGRAM_TYPE_LABELS.assistance_program },
+  { value: "hardship_support", label: PROGRAM_TYPE_LABELS.hardship_support },
+];
 
 export default function GrantsPage() {
   const [search, setSearch] = useState("");
@@ -23,6 +33,7 @@ export default function GrantsPage() {
   const [maxFunding, setMaxFunding] = useState("");
   const [deadlineBefore, setDeadlineBefore] = useState("");
   const [sort, setSort] = useState<SortOption>("newest");
+  const [programType, setProgramType] = useState<ProgramType | "">("");
 
   const results = useMemo(
     () =>
@@ -34,8 +45,9 @@ export default function GrantsPage() {
         maxFunding: maxFunding ? Number(maxFunding) : undefined,
         deadlineBefore: deadlineBefore || undefined,
         sort,
+        programType: programType || undefined,
       }),
-    [search, industry, location, minFunding, maxFunding, deadlineBefore, sort]
+    [search, industry, location, minFunding, maxFunding, deadlineBefore, sort, programType]
   );
 
   function reset() {
@@ -46,6 +58,7 @@ export default function GrantsPage() {
     setMaxFunding("");
     setDeadlineBefore("");
     setSort("newest");
+    setProgramType("");
   }
 
   return (
@@ -55,6 +68,16 @@ export default function GrantsPage() {
         Browse {allGrants.length} available grants &nbsp;|&nbsp;{" "}
         <Link href="/saved">⭐ View Saved Grants</Link>
       </p>
+
+      {/* Financial Help banner */}
+      <div className="fh-banner">
+        <span>
+          <strong>GrantLocate</strong> now helps you discover Grants, Relief Funds, Assistance Programs, and Hardship Support.
+        </span>
+        <Link href="/financial-help" className="fh-banner-link">
+          Explore Financial Help →
+        </Link>
+      </div>
 
       {/* Search */}
       <div className="search-bar">
@@ -117,6 +140,15 @@ export default function GrantsPage() {
             value={deadlineBefore}
             onChange={(e) => setDeadlineBefore(e.target.value)}
           />
+        </div>
+
+        <div className="filter-group">
+          <label>Program Type</label>
+          <select value={programType} onChange={(e) => setProgramType(e.target.value as ProgramType | "")}>
+            {PROGRAM_TYPE_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
         </div>
 
         <button className="btn-reset" onClick={reset}>Reset</button>

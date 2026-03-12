@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "grant-finder",
-      "runtimeExecutable": "node_modules/.bin/next.cmd",
-      "runtimeArgs": ["dev", "--port", "${PORT}"],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "${PORT}"],
       "port": 3000,
       "autoPort": true
     }

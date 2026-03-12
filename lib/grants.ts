@@ -1,5 +1,14 @@
 import grantsData from "@/data/grants.json";
 
+export type ProgramType = "grant" | "relief_fund" | "assistance_program" | "hardship_support";
+
+export const PROGRAM_TYPE_LABELS: Record<ProgramType, string> = {
+  grant: "Grants",
+  relief_fund: "Relief Funds",
+  assistance_program: "Assistance Programs",
+  hardship_support: "Hardship Support",
+};
+
 export interface Grant {
   id: string;
   title: string;
@@ -10,6 +19,7 @@ export interface Grant {
   location: string;
   description: string;
   source_url: string;
+  programType?: ProgramType;
 }
 
 export type SortOption = "newest" | "deadline" | "highest_funding";
@@ -22,6 +32,7 @@ export interface GrantFilters {
   deadlineBefore?: string;
   sort?: SortOption;
   search?: string;
+  programType?: ProgramType;
 }
 
 const grants: Grant[] = grantsData as Grant[];
@@ -76,6 +87,10 @@ export function filterAndSortGrants(filters: GrantFilters): Grant[] {
 
   if (filters.deadlineBefore) {
     result = result.filter((g) => g.deadline <= filters.deadlineBefore!);
+  }
+
+  if (filters.programType) {
+    result = result.filter((g) => (g.programType ?? "grant") === filters.programType);
   }
 
   switch (filters.sort) {

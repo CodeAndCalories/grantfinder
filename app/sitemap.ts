@@ -15,9 +15,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/grants`,         lastModified: LAST_MODIFIED },
-    { url: `${BASE_URL}/saved`,          lastModified: LAST_MODIFIED },
-    { url: `${BASE_URL}/student-grants`, lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/grants`,                          lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/saved`,                           lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/student-grants`,                  lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/financial-help`,                  lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/debt-relief-programs`,            lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/housing-assistance-programs`,     lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/small-business-grants`,           lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/financial-assistance-programs`,   lastModified: LAST_MODIFIED },
   ];
 
   // Industry pages — /grants/[industry]

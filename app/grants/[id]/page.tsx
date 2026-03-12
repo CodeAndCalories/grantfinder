@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getGrantById, getAllGrants, formatCurrency } from "@/lib/grants";
+import RelatedGrantLinks from "@/components/RelatedGrantLinks";
 
 // Render grant detail pages dynamically at request time.
 // This prevents pre-rendering 500+ pages at build time which caused
@@ -88,6 +89,8 @@ export default async function GrantDetailPage({ params }: { params: Promise<{ id
           </div>
         </div>
       </div>
+
+      <RelatedGrantLinks grant={grant} />
     </>
   );
 }
