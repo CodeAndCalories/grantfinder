@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import SiteNav from "@/components/SiteNav";
+import CookieConsent from "@/components/CookieConsent";
 
 export const metadata: Metadata = {
   title: "GrantLocate | Find Government Grants for Businesses and Nonprofits",
@@ -33,6 +34,8 @@ export default function RootLayout({
         </header>
 
         <main>{children}</main>
+
+        <CookieConsent />
 
         <footer className="site-footer">
           <div className="footer-inner">

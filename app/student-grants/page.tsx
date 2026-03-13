@@ -1,106 +1,77 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import { getAllGrants, formatCurrency } from "@/lib/grants";
 import GrantCard from "@/components/GrantCard";
 
-export const metadata: Metadata = {
-  title: "Student Grants | GrantLocate",
-  description:
-    "Find government and education grants for college students, graduate students, and research programs.",
-};
-
 const STUDENT_TAGS = ["Education", "Student", "Research", "Science", "Workforce Development"];
 
-const CATEGORY_DESCRIPTIONS: Record<string, { icon: string; label: string; description: string }> = {
-  Education: {
-    icon: "🎓",
-    label: "Education",
-    description: "Grants for schools, universities, and learners at every level.",
-  },
-  Research: {
-    icon: "🔬",
-    label: "Research",
-    description: "Funding for academic research projects and lab studies.",
-  },
-  Science: {
-    icon: "⚗️",
-    label: "Science",
-    description: "STEM-focused grants supporting scientific discovery.",
-  },
-  "Workforce Development": {
-    icon: "💼",
-    label: "Workforce Development",
-    description: "Grants to build skills and connect students to careers.",
-  },
+const CHIPS: { label: string; icon: string; tags: string[] }[] = [
+  { label: "All",                   icon: "🎓", tags: STUDENT_TAGS },
+  { label: "Undergraduate",         icon: "📚", tags: ["Education"] },
+  { label: "Graduate",              icon: "🔬", tags: ["Education", "Research", "Science"] },
+  { label: "STEM",                  icon: "⚗️", tags: ["Science", "Technology", "Innovation", "Research"] },
+  { label: "Research",              icon: "🧪", tags: ["Research", "Science"] },
+  { label: "Minority Scholarships", icon: "🌟", tags: ["Education", "Community"] },
+];
+
+const CATEGORY_META: Record<string, string> = {
+  Education: "🎓",
+  Research: "🔬",
+  Science: "⚗️",
+  "Workforce Development": "💼",
 };
 
-export default function StudentGrantsPage() {
-  const allGrants = getAllGrants();
+const allStudentGrants = getAllGrants().filter((g) =>
+  g.industry_tags.some((tag) =>
+    STUDENT_TAGS.some((st) => st.toLowerCase() === tag.toLowerCase())
+  )
+);
 
-  // Match any grant whose industry_tags overlap with STUDENT_TAGS (case-insensitive)
-  const studentGrants = allGrants.filter((g) =>
-    g.industry_tags.some((tag) =>
-      STUDENT_TAGS.some((st) => st.toLowerCase() === tag.toLowerCase())
-    )
-  );
+const totalFunding = allStudentGrants.reduce((sum, g) => sum + g.funding_amount, 0);
+const avgFunding = allStudentGrants.length > 0 ? Math.round(totalFunding / allStudentGrants.length) : 0;
 
-  const totalFunding = studentGrants.reduce((sum, g) => sum + g.funding_amount, 0);
-  const avgFunding = studentGrants.length > 0 ? Math.round(totalFunding / studentGrants.length) : 0;
-
-  // Group by primary matching tag for the breakdown strip
-  const tagCounts: Record<string, number> = {};
-  for (const grant of studentGrants) {
-    for (const tag of grant.industry_tags) {
-      if (STUDENT_TAGS.some((st) => st.toLowerCase() === tag.toLowerCase())) {
-        tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
-      }
+const tagCounts: Record<string, number> = {};
+for (const grant of allStudentGrants) {
+  for (const tag of grant.industry_tags) {
+    if (STUDENT_TAGS.some((st) => st.toLowerCase() === tag.toLowerCase())) {
+      tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
     }
   }
+}
+
+export default function StudentGrantsPage() {
+  const [activeChip, setActiveChip] = useState("All");
+
+  const chip = CHIPS.find((c) => c.label === activeChip) ?? CHIPS[0];
+  const visibleGrants = allStudentGrants.filter((g) =>
+    g.industry_tags.some((tag) =>
+      chip.tags.some((ct) => ct.toLowerCase() === tag.toLowerCase())
+    )
+  );
 
   return (
     <>
       {/* Hero */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%)",
-          borderRadius: "1rem",
-          padding: "2.5rem 2rem",
-          marginBottom: "2rem",
-          color: "#fff",
-        }}
-      >
-  <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🎓</div>
-
-  <h1 style={{ fontSize: "2rem", fontWeight: 800, margin: "0 0 0.75rem" }}>
-    Student &amp; College Grants
-  </h1>
-
-  <p style={{ maxWidth: "600px", opacity: 0.9, margin: "0 0 1rem", lineHeight: 1.6 }}>
-    Find government and education grants for college students, graduate students,
-    and research programs. All grants are sourced from federal, state, and local programs.
-  </p>
-
-  <p style={{ maxWidth: "600px", opacity: 0.85, margin: "0 0 1.5rem", lineHeight: 1.6 }}>
-    Student grants help cover tuition, research funding, and academic programs across
-    universities and colleges. Browse federal, state, and education grants available
-    for undergraduate and graduate students throughout the United States.
-  </p>
-
-        {/* Stat pills */}
+      <div className="student-hero">
+        <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🎓</div>
+        <h1 className="student-hero-title">Student &amp; College Grants</h1>
+        <p className="student-hero-desc">
+          Find government and education grants for college students, graduate students,
+          and research programs. All grants are sourced from federal, state, and local programs.
+        </p>
+        <p className="student-hero-desc" style={{ marginBottom: "1.5rem" }}>
+          Student grants help cover tuition, research funding, and academic programs across
+          universities and colleges. Browse federal, state, and education grants available
+          for undergraduate and graduate students throughout the United States.
+        </p>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
           {[
-            { value: studentGrants.length, label: "Grants Available" },
+            { value: allStudentGrants.length, label: "Grants Available" },
             { value: formatCurrency(avgFunding), label: "Avg. Award" },
             { value: formatCurrency(totalFunding), label: "Total Funding" },
           ].map(({ value, label }) => (
-            <div
-              key={label}
-              style={{
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(4px)",
-                borderRadius: "0.5rem",
-                padding: "0.6rem 1.1rem",
-              }}
-            >
+            <div key={label} className="student-stat-pill">
               <div style={{ fontSize: "1.25rem", fontWeight: 700 }}>{value}</div>
               <div style={{ fontSize: "0.72rem", opacity: 0.8, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 {label}
@@ -110,72 +81,50 @@ export default function StudentGrantsPage() {
         </div>
       </div>
 
+      {/* Category chips */}
+      <div className="student-chips">
+        {CHIPS.map((c) => (
+          <button
+            key={c.label}
+            className={`student-chip${activeChip === c.label ? " student-chip--active" : ""}`}
+            onClick={() => setActiveChip(c.label)}
+          >
+            {c.icon} {c.label}
+          </button>
+        ))}
+      </div>
+
       {/* Tag breakdown strip */}
       {Object.keys(tagCounts).length > 0 && (
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            flexWrap: "wrap",
-            marginBottom: "1.75rem",
-          }}
-        >
+        <div className="student-tag-strip">
           {Object.entries(tagCounts)
             .sort((a, b) => b[1] - a[1])
-            .map(([tag, count]) => {
-              const meta = CATEGORY_DESCRIPTIONS[tag];
-              return (
-                <div
-                  key={tag}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.4rem",
-                    padding: "0.4rem 0.85rem",
-                    borderRadius: "999px",
-                    background: "#eff6ff",
-                    border: "1px solid #bfdbfe",
-                    fontSize: "0.82rem",
-                    color: "#1d4ed8",
-                    fontWeight: 500,
-                  }}
-                >
-                  {meta?.icon ?? "📌"} {tag}
-                  <span
-                    style={{
-                      background: "#2563eb",
-                      color: "#fff",
-                      borderRadius: "999px",
-                      fontSize: "0.7rem",
-                      fontWeight: 700,
-                      padding: "0 0.4rem",
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    {count}
-                  </span>
-                </div>
-              );
-            })}
+            .map(([tag, count]) => (
+              <div key={tag} className="student-tag-pill">
+                {CATEGORY_META[tag] ?? "📌"} {tag}
+                <span className="student-tag-count">{count}</span>
+              </div>
+            ))}
         </div>
       )}
 
-      {/* Results count */}
+      {/* Results bar */}
       <div className="results-bar" style={{ marginBottom: "1rem" }}>
         <span className="results-count">
-          {studentGrants.length} {studentGrants.length === 1 ? "grant" : "grants"} found
+          {visibleGrants.length} {visibleGrants.length === 1 ? "grant" : "grants"} found
+          {activeChip !== "All" && <> · <strong>{activeChip}</strong></>}
         </span>
       </div>
 
       {/* Grant cards */}
-      {studentGrants.length === 0 ? (
+      {visibleGrants.length === 0 ? (
         <div className="empty-state">
-          <h2>No student grants found</h2>
-          <p>Check back soon — new grants are added regularly.</p>
+          <h2>No grants found for this category</h2>
+          <p>Try selecting a different chip or view All grants.</p>
         </div>
       ) : (
         <div className="grants-list">
-          {studentGrants.map((grant) => (
+          {visibleGrants.map((grant) => (
             <GrantCard key={grant.id} grant={grant} />
           ))}
         </div>
