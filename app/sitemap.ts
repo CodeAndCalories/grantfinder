@@ -23,6 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/housing-assistance-programs`,     lastModified: LAST_MODIFIED },
     { url: `${BASE_URL}/small-business-grants`,           lastModified: LAST_MODIFIED },
     { url: `${BASE_URL}/financial-assistance-programs`,   lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/privacy`,                         lastModified: LAST_MODIFIED },
+    { url: `${BASE_URL}/contact`,                         lastModified: LAST_MODIFIED },
   ];
 
   // Industry pages — /grants/[industry]

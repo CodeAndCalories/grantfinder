@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "grant-finder",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "${PORT}"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--port", "${PORT}"],
       "port": 3000,
       "autoPort": true
     }

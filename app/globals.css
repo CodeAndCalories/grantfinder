@@ -483,3 +483,129 @@ main {
   color: var(--muted);
   line-height: 1.6;
 }
+
+/* Site Footer */
+.site-footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 0;
+  background: var(--surface);
+}
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+}
+.footer-inner a {
+  color: var(--muted);
+  transition: color 0.15s;
+}
+.footer-inner a:hover {
+  color: var(--primary);
+}
+
+/* Static pages (Privacy, Contact) */
+.static-page {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.static-page h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+.static-intro {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+.static-section {
+  margin-bottom: 1.75rem;
+}
+.static-section h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.static-section p {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.75;
+  margin-bottom: 0.5rem;
+}
+.static-section a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+.static-list {
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+.pagination-btn {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.pagination-page {
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.pagination-page:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.pagination-page--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+.pagination-ellipsis {
+  padding: 0 0.2rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  user-select: none;
+}

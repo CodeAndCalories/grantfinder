@@ -33,6 +33,13 @@ export default function RootLayout({
         </header>
 
         <main>{children}</main>
+
+        <footer className="site-footer">
+          <div className="footer-inner">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/contact">Contact</a>
+          </div>
+        </footer>
       </body>
     </html>
   );
