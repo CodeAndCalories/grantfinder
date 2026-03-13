@@ -44,6 +44,7 @@ header {
   display: flex;
   align-items: center;
   gap: 2rem;
+  position: relative;
 }
 .logo {
   font-weight: 700;
@@ -804,4 +805,99 @@ main {
 }
 .cookie-accept:hover {
   background: #1d4ed8;
+}
+
+/* ── Site Navigation ─────────────────────────────────────────────────────── */
+
+/* Desktop nav — shown above 768px */
+.sitenav-desktop {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sitenav-link {
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+.sitenav-link:hover {
+  background: #f1f5f9;
+  color: var(--primary);
+}
+.sitenav-link--active {
+  font-weight: 600;
+  color: var(--primary);
+  background: #eff6ff;
+}
+
+/* Hamburger button — hidden on desktop */
+.sitenav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-left: auto;
+}
+.sitenav-bar {
+  display: block;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+  transform-origin: center;
+}
+.sitenav-bar--open-1 { transform: translateY(7px) rotate(45deg); }
+.sitenav-bar--open-2 { opacity: 0; }
+.sitenav-bar--open-3 { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile dropdown menu — anchors to sticky header */
+.sitenav-mobile {
+  display: none;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 20;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+.sitenav-mobile-link {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  border-left: 3px solid transparent;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.sitenav-mobile-link:hover {
+  background: #f8fafc;
+  color: var(--primary);
+  border-left-color: var(--primary);
+}
+.sitenav-mobile-link--active {
+  font-weight: 600;
+  color: var(--primary);
+  background: #eff6ff;
+  border-left-color: var(--primary);
+}
+
+/* Mobile breakpoint */
+@media (max-width: 767px) {
+  .sitenav-desktop  { display: none; }
+  .sitenav-hamburger { display: flex; }
+  .sitenav-mobile   { display: flex; }
 }

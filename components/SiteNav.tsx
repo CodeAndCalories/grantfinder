@@ -2,47 +2,69 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const NAV_LINKS = [
-  { href: "/grants", label: "All Grants" },
+  { href: "/grants",       label: "All Grants" },
   { href: "/financial-help", label: "Financial Help" },
   { href: "/student-grants", label: "Student Grants" },
-  { href: "/saved", label: "⭐ Saved" },
+  { href: "/saved",        label: "⭐ Saved" },
+];
+
+const MOBILE_EXTRA = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function SiteNav() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  function isActive(href: string) {
+    return pathname === href || (href !== "/grants" && pathname.startsWith(href));
+  }
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        gap: "0.25rem",
-        alignItems: "center",
-        flexWrap: "wrap",
-      }}
-    >
-      {NAV_LINKS.map(({ href, label }) => {
-        const active = pathname === href || (href !== "/grants" && pathname.startsWith(href));
-        return (
+    <>
+      {/* Desktop nav */}
+      <nav className="sitenav-desktop">
+        {NAV_LINKS.map(({ href, label }) => (
           <Link
             key={href}
             href={href}
-            style={{
-              padding: "0.4rem 0.85rem",
-              borderRadius: "0.375rem",
-              fontSize: "0.9rem",
-              fontWeight: active ? 600 : 400,
-              textDecoration: "none",
-              color: active ? "#2563eb" : "inherit",
-              background: active ? "#eff6ff" : "transparent",
-              transition: "background 0.15s, color 0.15s",
-            }}
+            className={`sitenav-link${isActive(href) ? " sitenav-link--active" : ""}`}
           >
             {label}
           </Link>
-        );
-      })}
-    </nav>
+        ))}
+      </nav>
+
+      {/* Mobile hamburger button */}
+      <button
+        className="sitenav-hamburger"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className={`sitenav-bar${open ? " sitenav-bar--open-1" : ""}`} />
+        <span className={`sitenav-bar${open ? " sitenav-bar--open-2" : ""}`} />
+        <span className={`sitenav-bar${open ? " sitenav-bar--open-3" : ""}`} />
+      </button>
+
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="sitenav-mobile" onClick={() => setOpen(false)}>
+          {[...NAV_LINKS, ...MOBILE_EXTRA].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`sitenav-mobile-link${isActive(href) ? " sitenav-mobile-link--active" : ""}`}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
