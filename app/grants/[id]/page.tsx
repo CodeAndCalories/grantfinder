@@ -1,17 +1,29 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getGrantById, getAllGrants, formatCurrency } from "@/lib/grants";
+import { getGrantById, formatCurrency } from "@/lib/grants";
+import type { Grant } from "@/lib/grants";
 import RelatedGrantLinks from "@/components/RelatedGrantLinks";
 
-// Render grant detail pages dynamically at request time.
-// This prevents pre-rendering 500+ pages at build time which caused
-// the Cloudflare adapter to hit its manifest string length limit.
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
+const WORKER_URL = process.env.GRANTS_WORKER_URL ?? "";
+
+async function fetchGrant(id: string): Promise<Grant | null> {
+  if (WORKER_URL) {
+    try {
+      const res = await fetch(`${WORKER_URL}/grants/${id}`, { cache: "no-store" });
+      if (res.ok) return res.json();
+    } catch {
+      // fall through to static fallback
+    }
+  }
+  return getGrantById(id) ?? null;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const grant = getGrantById(id);
+  const grant = await fetchGrant(id);
   if (!grant) return { title: "Grant Not Found" };
   return { title: `${grant.title} — GrantLocate` };
 }
@@ -28,7 +40,7 @@ function deadlineBadge(deadline: string) {
 
 export default async function GrantDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const grant = getGrantById(id);
+  const grant = await fetchGrant(id);
   if (!grant) notFound();
 
   return (

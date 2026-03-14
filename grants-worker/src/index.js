@@ -320,6 +320,32 @@ export default {
       }), { headers: cors });
     }
 
+    // /grants/:id — return a single grant by id
+    if (url.pathname.startsWith("/grants/") && url.pathname.split("/").length === 3) {
+      const id = url.pathname.split("/")[2];
+
+      let allGrants = [];
+      const chunksCount = await env.GRANTS_KV.get("grants_chunks");
+      if (chunksCount) {
+        const total = parseInt(chunksCount, 10);
+        const fetches = [];
+        for (let i = 0; i < total; i++) fetches.push(env.GRANTS_KV.get(`grants_data_${i}`));
+        const results = await Promise.all(fetches);
+        for (const chunk of results) {
+          if (chunk) allGrants.push(...JSON.parse(chunk));
+        }
+      } else {
+        const data = await env.GRANTS_KV.get("grants_data");
+        if (data) allGrants = JSON.parse(data);
+      }
+
+      const grant = allGrants.find((g) => g.id === id);
+      if (!grant) {
+        return new Response(JSON.stringify({ error: "Grant not found" }), { status: 404, headers: cors });
+      }
+      return new Response(JSON.stringify(grant), { headers: cors });
+    }
+
     // /grants — reassemble chunked grant data, with optional ?page= pagination
     if (url.pathname === "/grants") {
       const PAGE_SIZE = 20;
