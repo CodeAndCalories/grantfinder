@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllGrants, formatCurrency } from "@/lib/grants";
+import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 
 export const metadata: Metadata = {
   title: "Financial Help Programs | GrantLocate",
@@ -16,6 +17,12 @@ const RELIEF_FUNDS = [
     description: "Federal disaster relief for individuals and households affected by presidentially declared disasters, covering housing and essential needs.",
     tags: ["Disaster Relief", "Federal"],
     href: "https://www.fema.gov/assistance/individual",
+  },
+  {
+    title: "FEMA Public Assistance Program",
+    description: "Provides grants to state, local, tribal, and territorial governments and certain private nonprofits to help communities quickly respond to and recover from major disasters.",
+    tags: ["Disaster Relief", "Federal"],
+    href: "https://www.fema.gov/assistance/public",
   },
   {
     title: "American Red Cross Emergency Financial Assistance",
@@ -189,9 +196,14 @@ const QUICK_LINKS = [
   { label: "Financial Assistance Programs",href: "/financial-assistance-programs" },
 ];
 
-export default function FinancialHelpPage() {
+export default async function FinancialHelpPage() {
   const allGrants = getAllGrants();
-  const grantCount = allGrants.length;
+
+  // Fetch live total from Worker; fall back to "79,000+" if unavailable
+  const { total: liveTotal } = await getLiveGrantsPage(1);
+  const grantCountLabel = liveTotal > 1000
+    ? liveTotal.toLocaleString("en-US")
+    : "79,000+";
 
   // Latest 5 grants (highest id = newest)
   const latestGrants = [...allGrants]
@@ -208,7 +220,7 @@ export default function FinancialHelpPage() {
       {/* ── Category overview cards ─────────────────────────────────── */}
       <div className="fh-grid" style={{ marginBottom: "2.5rem" }}>
         {[
-          { icon: "🏛️", label: "Grants", count: grantCount, href: "/grants", desc: "Government and foundation grants for businesses, nonprofits, research, and community projects." },
+          { icon: "🏛️", label: "Grants", count: grantCountLabel, href: "/grants", desc: "Government and foundation grants for businesses, nonprofits, research, and community projects." },
           { icon: "🤝", label: "Relief Funds", count: RELIEF_FUNDS.length, href: "#relief-funds", desc: "Emergency and disaster relief funds for individuals, families, and businesses facing hardship." },
           { icon: "🏠", label: "Assistance Programs", count: ASSISTANCE_PROGRAMS.length, href: "#assistance-programs", desc: "Housing, utility, food, and other assistance programs for qualifying households." },
           { icon: "💙", label: "Hardship Support", count: HARDSHIP_SUPPORT.length, href: "#hardship-support", desc: "Debt relief, financial counseling, and support programs for those in financial difficulty." },
@@ -319,7 +331,7 @@ export default function FinancialHelpPage() {
           ))}
         </div>
         <div style={{ marginTop: "1rem" }}>
-          <Link href="/grants" className="fh-quick-link">View all {grantCount} grants →</Link>
+          <Link href="/grants" className="fh-quick-link">View all {grantCountLabel} grants →</Link>
         </div>
       </section>
 
