@@ -1,24 +1,20 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getGrantById, formatCurrency } from "@/lib/grants";
-import type { Grant } from "@/lib/grants";
-import RelatedGrantLinks from "@/components/RelatedGrantLinks";
+import { getGrantById, formatCurrency, type Grant } from "@/lib/grants";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
-const WORKER_URL = process.env.GRANTS_WORKER_URL ?? "";
-
-async function fetchGrant(id: string): Promise<Grant | null> {
-  if (WORKER_URL) {
+async function fetchGrant(id: string): Promise<Grant | undefined> {
+  const workerUrl = process.env.GRANTS_WORKER_URL;
+  if (workerUrl) {
     try {
-      const res = await fetch(`${WORKER_URL}/grants/${id}`, { cache: "no-store" });
+      const res = await fetch(`${workerUrl}/grants/${id}`, { cache: "no-store" });
       if (res.ok) return res.json();
-    } catch {
-      // fall through to static fallback
-    }
+    } catch {}
   }
-  return getGrantById(id) ?? null;
+  // Fallback to static JSON
+  return getGrantById(id);
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -101,8 +97,6 @@ export default async function GrantDetailPage({ params }: { params: Promise<{ id
           </div>
         </div>
       </div>
-
-      <RelatedGrantLinks grant={grant} />
     </>
   );
 }
