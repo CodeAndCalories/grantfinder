@@ -1,10 +1,18 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 import { useState } from "react";
 import { getAllGrants, formatCurrency } from "@/lib/grants";
 import GrantCard from "@/components/GrantCard";
 
-const STUDENT_TAGS = ["Education", "Student", "Research", "Science", "Workforce Development"];
+const STUDENT_TAGS = [
+  "Education", "Research", "Science", "Technology", "Innovation",
+  "Healthcare", "Workforce Development", "Environment", "Student",
+  "Training", "Academic", "Scholarship", "Fellowship", "STEM",
+  "University", "College",
+];
 
 const CHIPS: { label: string; icon: string; tags: string[] }[] = [
   { label: "All",                   icon: "🎓", tags: STUDENT_TAGS },

@@ -38,6 +38,9 @@ export default function RootLayout({
         <CookieConsent />
 
         <footer className="site-footer">
+          <p className="footer-blurb">
+            GrantLocate is a free directory helping businesses, nonprofits, students, and researchers discover 50,000+ government grants and funding opportunities across the United States.
+          </p>
           <div className="footer-inner">
             <a href="/about">About</a>
             <a href="/privacy">Privacy Policy</a>

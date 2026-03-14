@@ -4,7 +4,8 @@ export const runtime = "edge";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllGrants, getUniqueLocations, formatCurrency } from "@/lib/grants";
+import { getUniqueLocations, formatCurrency } from "@/lib/grants";
+import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 import GrantCard from "@/components/GrantCard";
 
 // ---------------------------------------------------------------------------
@@ -106,14 +107,21 @@ function getStateFact(state: string) {
 // ---------------------------------------------------------------------------
 export default async function StateGrantsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ state: string }>;
+  searchParams?: Promise<{ page?: string }>;
 }) {
   const { state: slug } = await params;
+  const sp = searchParams ? await searchParams : {};
+  const page = Number((sp as { page?: string })?.page || 1);
   const state = fromSlug(slug);
   if (!state) notFound();
 
-  const grants = getAllGrants().filter((g) => g.location === state);
+  const { grants: allPageGrants } = await getLiveGrantsPage(page);
+  const grants = allPageGrants.filter(
+    (g) => g.location === state || g.location === "National"
+  );
   const fact = getStateFact(state);
 
   const totalFunding = grants.reduce((sum, g) => sum + g.funding_amount, 0);
