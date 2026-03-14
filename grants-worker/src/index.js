@@ -320,33 +320,55 @@ export default {
       }), { headers: cors });
     }
 
-    // /grants — reassemble chunked grant data and return as one JSON array
+    // /grants — reassemble chunked grant data, with optional ?page= pagination
     if (url.pathname === "/grants") {
+      const PAGE_SIZE = 20;
+      const pageParam = url.searchParams.get("page");
+      const page = pageParam ? Math.max(1, parseInt(pageParam, 10) || 1) : null;
+
+      // Load all chunks into memory (required to support filtering/pagination)
+      let allGrants = [];
       const chunksCount = await env.GRANTS_KV.get("grants_chunks");
 
       if (chunksCount) {
-        // Chunked storage — fetch all in parallel and merge
         const total = parseInt(chunksCount, 10);
         const fetches = [];
         for (let i = 0; i < total; i++) {
           fetches.push(env.GRANTS_KV.get(`grants_data_${i}`));
         }
         const results = await Promise.all(fetches);
-        const allGrants = [];
         for (const chunk of results) {
           if (chunk) allGrants.push(...JSON.parse(chunk));
         }
-        return new Response(JSON.stringify(allGrants), { headers: cors });
+      } else {
+        // Legacy single-key fallback
+        const data = await env.GRANTS_KV.get("grants_data");
+        if (!data) {
+          return new Response(JSON.stringify({
+            error: "No grant data found. Run seed.mjs to populate KV.",
+          }), { status: 404, headers: cors });
+        }
+        allGrants = JSON.parse(data);
       }
 
-      // Legacy single-key fallback
-      const data = await env.GRANTS_KV.get("grants_data");
-      if (!data) {
+      // If ?page= param provided, return a paginated response
+      if (page !== null) {
+        const totalCount = allGrants.length;
+        const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+        const safePage = Math.min(page, totalPages);
+        const start = (safePage - 1) * PAGE_SIZE;
+        const grants = allGrants.slice(start, start + PAGE_SIZE);
         return new Response(JSON.stringify({
-          error: "No grant data found. Run seed.mjs to populate KV.",
-        }), { status: 404, headers: cors });
+          grants,
+          total: totalCount,
+          page: safePage,
+          totalPages,
+          pageSize: PAGE_SIZE,
+        }), { headers: cors });
       }
-      return new Response(data, { headers: cors });
+
+      // No ?page= — return full array (backward-compatible)
+      return new Response(JSON.stringify(allGrants), { headers: cors });
     }
 
     // /refresh — explains how to trigger the cron (can't do heavy work in HTTP)

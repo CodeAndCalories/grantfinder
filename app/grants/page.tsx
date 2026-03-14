@@ -1,23 +1,12 @@
-"use client";
-
-import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
-  getAllGrants,
   getUniqueIndustries,
   getUniqueLocations,
-  filterAndSortGrants,
-  type SortOption,
   type ProgramType,
   PROGRAM_TYPE_LABELS,
 } from "@/lib/grants";
+import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 import GrantCard from "@/components/GrantCard";
-
-const allGrants = getAllGrants();
-const industries = getUniqueIndustries();
-const locations = getUniqueLocations();
-
-const PAGE_SIZE = 20;
 
 const PROGRAM_TYPE_OPTIONS: { value: ProgramType | ""; label: string }[] = [
   { value: "", label: "All program types" },
@@ -27,54 +16,21 @@ const PROGRAM_TYPE_OPTIONS: { value: ProgramType | ""; label: string }[] = [
   { value: "hardship_support", label: PROGRAM_TYPE_LABELS.hardship_support },
 ];
 
-export default function GrantsPage() {
-  const [search, setSearch] = useState("");
-  const [industry, setIndustry] = useState("");
-  const [location, setLocation] = useState("");
-  const [minFunding, setMinFunding] = useState("");
-  const [maxFunding, setMaxFunding] = useState("");
-  const [deadlineBefore, setDeadlineBefore] = useState("");
-  const [sort, setSort] = useState<SortOption>("newest");
-  const [programType, setProgramType] = useState<ProgramType | "">("");
-  const [page, setPage] = useState(1);
+const industries = getUniqueIndustries();
+const locations = getUniqueLocations();
 
-  const results = useMemo(
-    () =>
-      filterAndSortGrants({
-        search: search || undefined,
-        industry: industry || undefined,
-        location: location || undefined,
-        minFunding: minFunding ? Number(minFunding) : undefined,
-        maxFunding: maxFunding ? Number(maxFunding) : undefined,
-        deadlineBefore: deadlineBefore || undefined,
-        sort,
-        programType: programType || undefined,
-      }),
-    [search, industry, location, minFunding, maxFunding, deadlineBefore, sort, programType]
-  );
+interface Props {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-  // Reset to page 1 whenever filters/sort change
-  useEffect(() => {
-    setPage(1);
-  }, [search, industry, location, minFunding, maxFunding, deadlineBefore, sort, programType]);
+export default async function GrantsPage({ searchParams }: Props) {
+  const page = Math.max(1, Number(searchParams?.page) || 1);
 
-  const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
-  const start = (page - 1) * PAGE_SIZE;
-  const paginatedResults = results.slice(start, start + PAGE_SIZE);
+  const { grants, total, totalPages } = await getLiveGrantsPage(page);
 
-  function reset() {
-    setSearch("");
-    setIndustry("");
-    setLocation("");
-    setMinFunding("");
-    setMaxFunding("");
-    setDeadlineBefore("");
-    setSort("newest");
-    setProgramType("");
-    setPage(1);
-  }
+  const start = (page - 1) * 20;
 
-  // Build a compact page number list: always show first, last, current ±2, with ellipsis
+  // Build pagination page numbers with ellipsis
   function pageNumbers(): (number | "…")[] {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -94,7 +50,7 @@ export default function GrantsPage() {
     <>
       <h1 className="page-title">Government Grants</h1>
       <p className="page-subtitle">
-        Browse {allGrants.length}+ active grants and funding opportunities &nbsp;|&nbsp;{" "}
+        Browse {total}+ active grants and funding opportunities &nbsp;|&nbsp;{" "}
         <Link href="/saved">⭐ View Saved Grants</Link>
       </p>
 
@@ -108,21 +64,20 @@ export default function GrantsPage() {
         </Link>
       </div>
 
-      {/* Search */}
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search by title, description, or eligibility…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
       {/* Filters */}
-      <div className="filters">
+      <form method="GET" action="/grants" className="filters" style={{ alignItems: "flex-end" }}>
+        <div className="search-bar" style={{ marginBottom: 0 }}>
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by title, description, or eligibility…"
+            defaultValue={searchParams?.search as string | undefined}
+          />
+        </div>
+
         <div className="filter-group">
           <label>Industry</label>
-          <select value={industry} onChange={(e) => setIndustry(e.target.value)}>
+          <select name="industry" defaultValue={searchParams?.industry as string | undefined}>
             <option value="">All industries</option>
             {industries.map((i) => (
               <option key={i} value={i}>{i}</option>
@@ -132,7 +87,7 @@ export default function GrantsPage() {
 
         <div className="filter-group">
           <label>Location</label>
-          <select value={location} onChange={(e) => setLocation(e.target.value)}>
+          <select name="location" defaultValue={searchParams?.location as string | undefined}>
             <option value="">All locations</option>
             {locations.map((l) => (
               <option key={l} value={l}>{l}</option>
@@ -144,9 +99,9 @@ export default function GrantsPage() {
           <label>Min Funding ($)</label>
           <input
             type="number"
+            name="minFunding"
             placeholder="e.g. 50000"
-            value={minFunding}
-            onChange={(e) => setMinFunding(e.target.value)}
+            defaultValue={searchParams?.minFunding as string | undefined}
             min={0}
           />
         </div>
@@ -155,9 +110,9 @@ export default function GrantsPage() {
           <label>Max Funding ($)</label>
           <input
             type="number"
+            name="maxFunding"
             placeholder="e.g. 500000"
-            value={maxFunding}
-            onChange={(e) => setMaxFunding(e.target.value)}
+            defaultValue={searchParams?.maxFunding as string | undefined}
             min={0}
           />
         </div>
@@ -166,50 +121,54 @@ export default function GrantsPage() {
           <label>Deadline Before</label>
           <input
             type="date"
-            value={deadlineBefore}
-            onChange={(e) => setDeadlineBefore(e.target.value)}
+            name="deadlineBefore"
+            defaultValue={searchParams?.deadlineBefore as string | undefined}
           />
         </div>
 
         <div className="filter-group">
           <label>Program Type</label>
-          <select value={programType} onChange={(e) => setProgramType(e.target.value as ProgramType | "")}>
+          <select name="programType" defaultValue={searchParams?.programType as string | undefined}>
             {PROGRAM_TYPE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
         </div>
 
-        <button className="btn-reset" onClick={reset}>Reset</button>
-      </div>
+        <button type="submit" className="btn-reset">Search</button>
+        <Link href="/grants" className="btn-reset" style={{ textAlign: "center" }}>Reset</Link>
+      </form>
 
       {/* Results bar */}
       <div className="results-bar">
         <span className="results-count">
-          {results.length === 0
+          {total === 0
             ? "0 grants found"
-            : `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, results.length)} of ${results.length} ${results.length === 1 ? "grant" : "grants"}`}
+            : `Showing ${start + 1}–${Math.min(start + 20, total)} of ${total} grants`}
         </span>
-        <select
-          className="sort-select"
-          value={sort}
-          onChange={(e) => setSort(e.target.value as SortOption)}
-        >
-          <option value="newest">Sort: Newest</option>
-          <option value="deadline">Sort: Deadline Soon</option>
-          <option value="highest_funding">Sort: Highest Funding</option>
-        </select>
+        <form method="GET" action="/grants" style={{ display: "inline" }}>
+          <select
+            name="sort"
+            className="sort-select"
+            defaultValue={searchParams?.sort as string | undefined}
+            onChange={undefined}
+          >
+            <option value="newest">Sort: Newest</option>
+            <option value="deadline">Sort: Deadline Soon</option>
+            <option value="highest_funding">Sort: Highest Funding</option>
+          </select>
+        </form>
       </div>
 
       {/* Grant list */}
-      {results.length === 0 ? (
+      {grants.length === 0 ? (
         <div className="empty-state">
           <h2>No grants found</h2>
           <p>Try adjusting your filters or search terms.</p>
         </div>
       ) : (
         <div className="grants-list">
-          {paginatedResults.map((grant) => (
+          {grants.map((grant) => (
             <GrantCard key={grant.id} grant={grant} />
           ))}
         </div>
@@ -218,38 +177,38 @@ export default function GrantsPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <nav className="pagination" aria-label="Pagination">
-          <button
-            className="pagination-btn"
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
+          <Link
+            href={`/grants?page=${Math.max(1, page - 1)}`}
+            className={`pagination-btn${page === 1 ? " pagination-btn--disabled" : ""}`}
+            aria-disabled={page === 1}
           >
             ← Previous
-          </button>
+          </Link>
 
           <div className="pagination-pages">
             {pageNumbers().map((n, i) =>
               n === "…" ? (
                 <span key={`ellipsis-${i}`} className="pagination-ellipsis">…</span>
               ) : (
-                <button
+                <Link
                   key={n}
+                  href={`/grants?page=${n}`}
                   className={`pagination-page${page === n ? " pagination-page--active" : ""}`}
-                  onClick={() => setPage(n)}
                   aria-current={page === n ? "page" : undefined}
                 >
                   {n}
-                </button>
+                </Link>
               )
             )}
           </div>
 
-          <button
-            className="pagination-btn"
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
+          <Link
+            href={`/grants?page=${Math.min(totalPages, page + 1)}`}
+            className={`pagination-btn${page === totalPages ? " pagination-btn--disabled" : ""}`}
+            aria-disabled={page === totalPages}
           >
             Next →
-          </button>
+          </Link>
         </nav>
       )}
     </>

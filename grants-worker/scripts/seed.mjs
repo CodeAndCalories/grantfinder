@@ -192,10 +192,10 @@ function parseXml(xmlPath) {
     from = end + closeTag.length;
 
     if (!title || !opportunityId) { skipped++; continue; }
-    const fundingAmount = parseInt(awardCeiling, 10);
-    if (!fundingAmount || fundingAmount <= 0) { skipped++; continue; }
-    const deadline = parseDate(closeDate);
-    if (!deadline) { skipped++; continue; }
+    const fundingAmount = parseInt(awardCeiling, 10) || 0;
+    const deadline = parseDate(closeDate) || 'Rolling';
+    // Skip only if BOTH funding amount and deadline are missing
+    if (fundingAmount <= 0 && deadline === 'Rolling') { skipped++; continue; }
 
     const cleanDesc = description
       .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 400);

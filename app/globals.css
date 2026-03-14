@@ -574,9 +574,11 @@ main {
   color: var(--primary);
   background: #f0f6ff;
 }
-.pagination-btn:disabled {
+.pagination-btn:disabled,
+.pagination-btn--disabled {
   opacity: 0.4;
   cursor: default;
+  pointer-events: none;
 }
 .pagination-pages {
   display: flex;
