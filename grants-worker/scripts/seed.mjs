@@ -156,6 +156,21 @@ function downloadFile(url, dest) {
 }
 
 // ---------------------------------------------------------------------------
+// HTML entity decoder
+// ---------------------------------------------------------------------------
+function decodeHtml(str) {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&apos;/g, "'")
+    .replace(/&#039;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n))
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
+}
+
+// ---------------------------------------------------------------------------
 // Parse XML into grant objects
 // ---------------------------------------------------------------------------
 function parseXml(xmlPath) {
@@ -194,22 +209,26 @@ function parseXml(xmlPath) {
 
     if (!title || !opportunityId) { skipped++; continue; }
     const fundingAmount = parseInt(awardCeiling, 10) || parseInt(awardFloor, 10) || 0;
+    if (!fundingAmount || fundingAmount <= 0) { skipped++; continue; }
+    // Skip non-competitive award notices
+    if (title.toUpperCase().includes('NOTICE OF INTENT') ||
+        description.toUpperCase().includes('NOT A REQUEST FOR APPLICATIONS')) {
+      skipped++; continue;
+    }
     const deadline = parseDate(closeDate) || 'Rolling';
-    // Skip only if BOTH funding amount and deadline are missing
-    if (fundingAmount <= 0 && deadline === 'Rolling') { skipped++; continue; }
 
     const cleanDesc = description
       .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 400);
 
     grants.push({
       id:             String(id++),
-      title:          title.slice(0, 120),
+      title:          decodeHtml(title).slice(0, 120),
       funding_amount: fundingAmount,
       deadline,
-      eligibility:    parseEligibility(eligCodes),
+      eligibility:    decodeHtml(parseEligibility(eligCodes)),
       industry_tags:  cfdaToTags(cfda),
       location:       'National',
-      description:    cleanDesc || `Federal grant: ${title}`,
+      description:    decodeHtml(cleanDesc) || `Federal grant: ${decodeHtml(title)}`,
       source_url:     `https://www.grants.gov/search-results-detail/${opportunityId}`,
     });
 

@@ -50,7 +50,7 @@ export default async function GrantsPage({ searchParams }: Props) {
     <>
       <h1 className="page-title">Government Grants</h1>
       <p className="page-subtitle">
-        Browse {total}+ active grants and funding opportunities &nbsp;|&nbsp;{" "}
+        Browse 50,000+ active grants and funding opportunities &nbsp;|&nbsp;{" "}
         <Link href="/saved">⭐ View Saved Grants</Link>
       </p>
 
