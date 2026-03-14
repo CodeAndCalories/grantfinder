@@ -17,7 +17,7 @@ const allGrants = getAllGrants();
 const industries = getUniqueIndustries();
 const locations = getUniqueLocations();
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 20;
 
 const PROGRAM_TYPE_OPTIONS: { value: ProgramType | ""; label: string }[] = [
   { value: "", label: "All program types" },
@@ -94,7 +94,7 @@ export default function GrantsPage() {
     <>
       <h1 className="page-title">Government Grants</h1>
       <p className="page-subtitle">
-        Browse {allGrants.length} available grants &nbsp;|&nbsp;{" "}
+        Browse {allGrants.length}+ active grants and funding opportunities &nbsp;|&nbsp;{" "}
         <Link href="/saved">⭐ View Saved Grants</Link>
       </p>
 

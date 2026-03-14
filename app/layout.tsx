@@ -39,7 +39,9 @@ export default function RootLayout({
 
         <footer className="site-footer">
           <div className="footer-inner">
+            <a href="/about">About</a>
             <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms</a>
             <a href="/contact">Contact</a>
           </div>
         </footer>
