@@ -2,6 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getGrantById, formatCurrency, type Grant } from "@/lib/grants";
 
+function toSlug(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
@@ -96,6 +100,31 @@ export default async function GrantDetailPage({ params }: { params: Promise<{ id
             </a>
           </div>
         </div>
+      </div>
+
+      {/* More grants links */}
+      <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border)" }}>
+        <h2 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "0.75rem" }}>Related Grants</h2>
+        <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          {grant.industry_tags[0] && (
+            <li>
+              <Link
+                href={`/grants/${toSlug(grant.industry_tags[0])}`}
+                style={{ color: "var(--primary)", fontWeight: 500 }}
+              >
+                More {grant.industry_tags[0]} grants →
+              </Link>
+            </li>
+          )}
+          <li>
+            <Link
+              href={`/grants?search=${encodeURIComponent(grant.title.split(" ")[0])}`}
+              style={{ color: "var(--primary)", fontWeight: 500 }}
+            >
+              More grants like this →
+            </Link>
+          </li>
+        </ul>
       </div>
     </>
   );
