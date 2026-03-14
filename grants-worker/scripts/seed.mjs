@@ -180,6 +180,7 @@ function parseXml(xmlPath) {
     const opportunityId = extractTag(block, 'OpportunityID');
     const title         = extractTag(block, 'OpportunityTitle');
     const awardCeiling  = extractTag(block, 'AwardCeiling');
+    const awardFloor    = extractTag(block, 'AwardFloor');
     const closeDate     = extractTag(block, 'CloseDate');
     const eligCodes     = extractTag(block, 'EligibleApplicants');
     const cfda          = extractTag(block, 'CFDANumbers');
@@ -192,7 +193,7 @@ function parseXml(xmlPath) {
     from = end + closeTag.length;
 
     if (!title || !opportunityId) { skipped++; continue; }
-    const fundingAmount = parseInt(awardCeiling, 10) || 0;
+    const fundingAmount = parseInt(awardCeiling, 10) || parseInt(awardFloor, 10) || 0;
     const deadline = parseDate(closeDate) || 'Rolling';
     // Skip only if BOTH funding amount and deadline are missing
     if (fundingAmount <= 0 && deadline === 'Rolling') { skipped++; continue; }
