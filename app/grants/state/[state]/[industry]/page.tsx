@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  getAllGrants,
   getUniqueLocations,
   getUniqueIndustries,
   formatCurrency,
 } from "@/lib/grants";
+import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 import GrantCard from "@/components/GrantCard";
 
 // ---------------------------------------------------------------------------
@@ -72,6 +72,20 @@ function heroGradient(industry: string): string {
 }
 
 // ---------------------------------------------------------------------------
+// Category intro paragraphs
+// ---------------------------------------------------------------------------
+const CATEGORY_INTROS: Record<string, string> = {
+  Education: "Education grants provide funding for schools, teachers, nonprofits, and individuals seeking to advance learning opportunities. Federal education grants support programs ranging from early childhood development to higher education research initiatives. Whether you are a nonprofit organization improving literacy rates, a school district modernizing technology, or an individual pursuing advanced degrees, there are federal funding opportunities available. Use the listings below to find active education grants relevant to your location and goals.",
+  "Small Business": "Small business grants provide non-repayable funding to entrepreneurs, startups, and growing companies. Unlike loans, grants do not require repayment, making them one of the most valuable resources for business owners. Federal small business grants often target innovation, job creation, technology development, and underserved communities. Browse the active opportunities below to find small business funding programs you may qualify for.",
+  Agriculture: "Agriculture grants support farmers, ranchers, rural communities, and agricultural researchers across the United States. Federal programs through the USDA and other agencies fund initiatives including sustainable farming, rural development, food security, and agricultural technology. Whether you operate a small family farm or a large agricultural enterprise, federal funding programs may be available to support your work.",
+  Healthcare: "Healthcare grants fund medical research, community health programs, clinical trials, and public health initiatives. Federal agencies including the NIH, CDC, and HRSA offer hundreds of active funding opportunities for healthcare organizations, researchers, and nonprofits. Browse current healthcare grant opportunities below.",
+  Research: "Research grants support scientific investigation, academic study, and innovation across all disciplines. Federal research funding is available through agencies including the NSF, NIH, DOE, and NASA. Whether you are an independent researcher, university, or private institution, active federal research grants are listed below.",
+  Energy: "Energy grants fund clean energy development, energy efficiency programs, grid modernization, and renewable energy research. Federal agencies including the Department of Energy offer significant funding for both public and private sector energy initiatives. Browse active energy grant opportunities below.",
+  Community: "Community development grants support nonprofits, local governments, and organizations working to improve neighborhoods, expand services, and strengthen communities. Federal community grants fund housing, workforce development, public safety, and social services programs. Find active community grants below.",
+  Environment: "Environmental grants fund conservation, climate research, pollution reduction, and natural resource management. Federal agencies including the EPA and Department of Interior offer grants for both organizations and government entities working to protect the environment. Browse active environmental grant opportunities below.",
+};
+
+// ---------------------------------------------------------------------------
 // Page component
 // ---------------------------------------------------------------------------
 export default async function StateIndustryPage({
@@ -84,15 +98,22 @@ export default async function StateIndustryPage({
   const industry = industryFromSlug(industrySlug);
   if (!state || !industry) notFound();
 
-  // Filter grants matching both state AND industry tag
-  const grants = getAllGrants().filter(
+  // Fetch live grants and filter by state + industry tag
+  const liveData = await getLiveGrantsPage(1);
+  const allGrants = liveData.grants;
+
+  const grants = allGrants.filter(
     (g) =>
       g.location === state &&
       g.industry_tags.some((t) => toSlug(t) === industrySlug)
   );
 
-  const totalFunding = grants.reduce((sum, g) => sum + g.funding_amount, 0);
+  const totalFunding = grants.reduce((sum, g) => sum + (g.funding_amount ?? 0), 0);
   const avgFunding   = grants.length > 0 ? Math.round(totalFunding / grants.length) : 0;
+
+  // Category intro
+  const categoryIntro = CATEGORY_INTROS[industry] ??
+    `Browse active federal grant opportunities for ${industry} in ${state}. These listings are sourced directly from Grants.gov and updated regularly.`;
 
   // Related industries available in this state (excluding current)
   const relatedIndustries = Array.from(
@@ -104,7 +125,7 @@ export default async function StateIndustryPage({
   // Other states that have grants in this industry
   const otherStates = Array.from(
     new Set(
-      getAllGrants()
+      allGrants
         .filter(
           (g) =>
             g.location !== state &&
@@ -165,8 +186,7 @@ export default async function StateIndustryPage({
           {industry} Grants in {state}
         </h1>
         <p style={{ maxWidth: "600px", opacity: 0.9, margin: "0 0 1.5rem", lineHeight: 1.6 }}>
-          Browse {industry.toLowerCase()} grants available in {state} for businesses, nonprofits,
-          students, and research programs.
+          {categoryIntro}
         </p>
 
         {/* Stat pills */}
