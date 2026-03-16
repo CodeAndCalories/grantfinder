@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 import GrantMatchWizard from "@/components/GrantMatchWizard";
 import type { Metadata } from "next";
@@ -7,8 +8,7 @@ export const metadata: Metadata = {
   description: "Answer 3 quick questions and find federal grants you may qualify for. Our Grant Match tool filters 100+ active opportunities to show the most relevant funding.",
 };
 export default async function GrantMatchPage() {
-  const pages = await Promise.all([1,2,3,4,5].map(p => getLiveGrantsPage(p)));
-  const grants = pages.flatMap(p => p.grants);
+  const { grants } = await getLiveGrantsPage(1);
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="text-center mb-10">
