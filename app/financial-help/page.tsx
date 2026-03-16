@@ -320,10 +320,10 @@ export default async function FinancialHelpPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
                 <h3 style={{ fontSize: "0.92rem" }}>{g.title}</h3>
                 <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#2563eb", whiteSpace: "nowrap" }}>
-                  {formatCurrency(g.funding_amount)}
+                  {g.funding_amount != null ? formatCurrency(g.funding_amount) : "Varies"}
                 </span>
               </div>
-              <p style={{ fontSize: "0.82rem" }}>{g.location} · Deadline {new Date(g.deadline).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+              <p style={{ fontSize: "0.82rem" }}>{g.location} · Deadline {g.deadline ? new Date(g.deadline).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "See listing"}</p>
               <div className="fh-program-tags">
                 {g.industry_tags.slice(0, 3).map((t) => <span key={t} className="fh-program-tag">{t}</span>)}
               </div>

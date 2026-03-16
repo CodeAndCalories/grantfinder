@@ -65,11 +65,11 @@ export default async function HomePage() {
                   {grant.title}
                 </span>
                 <span style={{ fontWeight: 700, color: "var(--primary)", whiteSpace: "nowrap", fontSize: "0.9rem" }}>
-                  {formatCurrency(grant.funding_amount)}
+                  {grant.funding_amount != null ? formatCurrency(grant.funding_amount) : "Varies"}
                 </span>
               </div>
               <div style={{ marginTop: "0.35rem", fontSize: "0.8rem", color: "var(--muted)" }}>
-                {grant.location} &nbsp;·&nbsp; Deadline: {grant.deadline}
+                {grant.location} &nbsp;·&nbsp; Deadline: {grant.deadline ?? "See listing"}
                 {grant.industry_tags.length > 0 && (
                   <> &nbsp;·&nbsp; {grant.industry_tags.slice(0, 2).join(", ")}</>
                 )}

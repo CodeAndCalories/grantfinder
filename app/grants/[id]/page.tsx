@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: `${grant.title} — GrantLocate` };
 }
 
-function deadlineBadge(deadline: string) {
+function deadlineBadge(deadline: string | null) {
+  if (!deadline) return <span className="value">See listing</span>;
   const today = new Date();
   const d = new Date(deadline);
   const days = Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
@@ -55,7 +56,7 @@ export default async function GrantDetailPage({ params }: { params: Promise<{ id
           <div className="detail-stats">
             <div className="detail-stat">
               <label>Funding Amount</label>
-              <span className="value amount">{formatCurrency(grant.funding_amount)}</span>
+              <span className="value amount">{grant.funding_amount != null ? formatCurrency(grant.funding_amount) : "Varies"}</span>
             </div>
             <div className="detail-stat">
               <label>Deadline</label>
