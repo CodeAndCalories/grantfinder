@@ -27,6 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/terms`,                           lastModified: LAST_MODIFIED },
     { url: `${BASE_URL}/privacy`,                         lastModified: LAST_MODIFIED },
     { url: `${BASE_URL}/contact`,                         lastModified: LAST_MODIFIED },
+    { url: 'https://grantlocate.com/guides/grant-writing-101', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
   ];
 
   // Industry pages — /grants/[industry]
