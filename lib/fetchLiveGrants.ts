@@ -112,8 +112,15 @@ function agencyToTags(agencyName: string | undefined | null): string[] {
 
 /** Maps a Grants.gov opportunity to the app's Grant shape */
 function mapOpportunity(opp: GovOpportunity): Grant {
-  const funding =
+  const rawFunding =
     (opp.awardCeiling ?? 0) > 0 ? opp.awardCeiling : (opp.awardFloor ?? 0);
+  // Null when zero/missing so the UI can display "Varies" or "See listing"
+  const funding = rawFunding > 0 ? rawFunding : null;
+
+  const rawDeadline = parseGovDate(opp.closeDate ?? "");
+  // Null when absent/unparseable so the UI can display "See listing"
+  const deadline = rawDeadline || null;
+
   const eligibility =
     Array.isArray(opp.eligibilities) && opp.eligibilities.length > 0
       ? opp.eligibilities.map((e) => e.description).filter(Boolean).join(", ")
@@ -122,8 +129,8 @@ function mapOpportunity(opp: GovOpportunity): Grant {
   return {
     id: (opp.id ?? opp.number ?? "0").toString(),
     title: opp.title ?? "Untitled Grant",
-    funding_amount: funding ?? 0,
-    deadline: parseGovDate(opp.closeDate ?? ""),
+    funding_amount: funding,
+    deadline: deadline,
     eligibility,
     industry_tags: agencyToTags(opp.agencyName),
     location: "Nationwide",
@@ -131,7 +138,7 @@ function mapOpportunity(opp: GovOpportunity): Grant {
       opp.synopsis || opp.description || "See official grant page for details.",
     source_url: `https://www.grants.gov/search-results-detail/${opp.id}`,
     programType: "grant",
-  };
+  } as Grant;
 }
 
 // ── Core Grants.gov fetch ───────────────────────────────────────────────────
