@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "grant-finder",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["next", "dev", "--port", "${PORT}"],
+      "name": "grant-database",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "${PORT}"],
       "port": 3000,
       "autoPort": true
     }
