@@ -53,6 +53,11 @@ export default function RootLayout({
             <a href="/terms">Terms</a>
             <a href="/contact">Contact</a>
           </div>
+          <div className="footer-inner">
+            <a href="/grants/closing-soon">Grants Closing Soon</a>
+            <a href="/grants/due-this-week">Grants Due This Week</a>
+            <a href="/grants/due-this-month">Grants Due This Month</a>
+          </div>
         </footer>
       </body>
     </html>
