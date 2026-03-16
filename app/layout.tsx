@@ -41,6 +41,9 @@ export default function RootLayout({
           <p className="footer-blurb">
             GrantLocate is a free directory helping businesses, nonprofits, students, and researchers discover 50,000+ government grants and funding opportunities across the United States.
           </p>
+          <p className="footer-disclaimer">
+            GrantLocate.com is not a government agency and does not provide funding. Eligibility is determined by the granting organization.
+          </p>
           <div className="footer-inner">
             <a href="/about">About</a>
             <a href="/privacy">Privacy Policy</a>

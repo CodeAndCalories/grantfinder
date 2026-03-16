@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About GrantLocate — Grant & Financial Assistance Directory",
+  title: "About GrantLocate — Finding Opportunities. Empowering Growth.",
   description:
-    "GrantLocate is a directory helping businesses, nonprofits, researchers, and students discover funding opportunities across the United States.",
+    "GrantLocate is a developer-led grant discovery platform founded in 2026, committed to making federal and public funding accessible to everyone.",
 };
 
 export default function AboutPage() {
@@ -12,52 +12,62 @@ export default function AboutPage() {
       <div className="static-page">
         <h1>About GrantLocate</h1>
         <p className="static-intro">
-          GrantLocate is a directory designed to help businesses, nonprofits,
-          researchers, and students discover funding opportunities across the
-          United States.
+          Finding Opportunities. Empowering Growth.
         </p>
 
         <section className="static-section">
-          <h2>What We Do</h2>
+          <h2>Our Mission</h2>
           <p>
-            Our platform aggregates grants and financial assistance programs
-            from federal, state, and nonprofit sources, making it easier to
-            explore available funding opportunities in one place.
-          </p>
-          <p>
-            GrantLocate continues expanding to include relief funds, assistance
-            programs, and hardship support resources.
-          </p>
-        </section>
-
-        <section className="static-section">
-          <h2>Who We Help</h2>
-          <p>
-            We serve a wide range of users including small business owners,
-            nonprofit organizations, academic researchers, community groups,
-            and individuals seeking financial assistance. Whether you are
-            looking for federal grants, state-level funding, or community
-            relief programs, GrantLocate helps you find and explore your
-            options.
+            Founded in 2026, GrantLocate was built on a simple belief: grant
+            funding should be discoverable by anyone, not just those with access
+            to expensive consultants or institutional resources. We apply
+            developer-led search technology to index tens of thousands of active
+            federal and public funding opportunities, making them searchable,
+            filterable, and free to access.
           </p>
         </section>
 
         <section className="static-section">
-          <h2>Our Data</h2>
+          <h2>What Sets Us Apart</h2>
+          <ul className="static-list">
+            <li>
+              <strong>Developer-Led Precision</strong> — our search and
+              filtering infrastructure is purpose-built for grant discovery,
+              not a generic directory bolted onto a CMS. Results are current,
+              paginated from live government data, and optimized for relevance.
+            </li>
+            <li>
+              <strong>Privacy-First Discovery</strong> — no account required,
+              no email capture, no tracking of what you search for. Browse
+              50,000+ grants without creating a profile or handing over
+              personal data.
+            </li>
+            <li>
+              <strong>Curation &amp; Context</strong> — beyond raw listings,
+              we provide curated pages for specific audiences (small businesses,
+              students, state-level seekers) with enough context to quickly
+              assess fit before clicking through to the official source.
+            </li>
+          </ul>
+        </section>
+
+        <section className="static-section">
+          <h2>Important Disclaimer</h2>
           <p>
-            All grant and assistance program information on GrantLocate is
-            sourced from publicly available government agencies, nonprofit
-            organizations, and official program websites. We strive to keep
-            listings accurate and up to date. Users should always verify
-            details directly with the official program source before applying.
+            We are not a government agency and do not provide funding
+            ourselves. GrantLocate is an independent directory that links to
+            official program pages. Eligibility, award amounts, and deadlines
+            are determined solely by the granting organization. Always verify
+            details with the official source before applying.
           </p>
         </section>
 
         <section className="static-section">
-          <h2>Contact Us</h2>
+          <h2>Contact</h2>
           <p>
-            Have a question or want to suggest a grant listing?{" "}
-            <a href="/contact">Contact our team</a>.
+            Questions or feedback?{" "}
+            <a href="/contact">Reach out to our team</a> — we&apos;d love to
+            hear from you.
           </p>
         </section>
       </div>

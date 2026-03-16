@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contact — GrantLocate",
-  description: "Contact the GrantLocate team with questions about grants or to suggest a listing.",
+  description:
+    "Contact the GrantLocate team for general inquiries, data and privacy questions, or technical support.",
 };
 
 export default function ContactPage() {
@@ -11,28 +12,52 @@ export default function ContactPage() {
       <div className="static-page">
         <h1>Contact GrantLocate</h1>
         <p className="static-intro">
-          Have questions about a grant or want to suggest a listing?
+          GrantLocate is a developer-led project based in the United States. We
+          read every message and typically respond within 48 business hours.
         </p>
 
         <section className="static-section">
-          <h2>Email Us</h2>
+          <h2>General Inquiries</h2>
           <p>
-            Reach out to our team at{" "}
-            <a href="mailto:info@grantlocate.com">info@grantlocate.com</a>.
+            Questions about grants, site features, or partnership
+            opportunities:
+          </p>
+          <p>
+            <a href="mailto:hello@grantlocate.com">hello@grantlocate.com</a>
           </p>
         </section>
 
         <section className="static-section">
-          <h2>Response Time</h2>
-          <p>We typically respond within 48 hours.</p>
+          <h2>Data &amp; Privacy</h2>
+          <p>
+            Requests related to personal data, GDPR/CCPA rights, or our{" "}
+            <a href="/privacy">Privacy Policy</a>:
+          </p>
+          <p>
+            <a href="mailto:privacy@grantlocate.com">
+              privacy@grantlocate.com
+            </a>
+          </p>
+        </section>
+
+        <section className="static-section">
+          <h2>Technical Support</h2>
+          <p>Reporting a bug, broken link, or site issue:</p>
+          <p>
+            <a href="mailto:support@grantlocate.com">
+              support@grantlocate.com
+            </a>
+          </p>
         </section>
 
         <section className="static-section">
           <h2>Suggest a Grant Listing</h2>
           <p>
-            Know of a grant, relief fund, or assistance program that should be listed on
-            GrantLocate? Email us with the program name, funding amount, deadline, and a link
-            to the official source and we will review it for inclusion.
+            Know of a grant, relief fund, or assistance program we should
+            include? Email{" "}
+            <a href="mailto:hello@grantlocate.com">hello@grantlocate.com</a>{" "}
+            with the program name, funding amount, deadline, and a link to the
+            official source and we will review it for inclusion.
           </p>
         </section>
       </div>
