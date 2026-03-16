@@ -116,19 +116,23 @@ export default function GrantCard({ grant, onUnsave }: GrantCardProps) {
         <Link href={`/grants/${grant.id}`} className="grant-card-title">
           {grant.title}
         </Link>
-        <span className="grant-amount">{formatCurrency(grant.funding_amount)}</span>
+        <span className="grant-amount">
+          {grant.funding_amount != null ? formatCurrency(grant.funding_amount) : "Varies"}
+        </span>
       </div>
 
       <div className="grant-meta">
         <span>📍 {grant.location}</span>
-        <span className={deadlineClass(grant.deadline)}>
+        <span className={grant.deadline ? deadlineClass(grant.deadline) : ""}>
           ⏰ Deadline:{" "}
-          {new Date(grant.deadline).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}
-          <DeadlineBadge deadline={grant.deadline} />
+          {grant.deadline
+            ? new Date(grant.deadline).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })
+            : "See listing"}
+          {grant.deadline && <DeadlineBadge deadline={grant.deadline} />}
         </span>
       </div>
 
