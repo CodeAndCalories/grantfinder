@@ -33,6 +33,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://grantlocate.com/grants/closing-soon', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
     { url: 'https://grantlocate.com/grants/due-this-week', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
     { url: 'https://grantlocate.com/grants/due-this-month', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
+    { url: 'https://grantlocate.com/grant-match', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1.0 },
+    { url: 'https://grantlocate.com/grants-for-students', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
+    { url: 'https://grantlocate.com/grants-for-small-business', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
+    { url: 'https://grantlocate.com/grants-for-nonprofits', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
   ];
 
   // Industry pages — /grants/[industry]
