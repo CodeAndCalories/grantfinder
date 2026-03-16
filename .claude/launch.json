@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "grant-database",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "${PORT}"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js", "run", "dev", "--", "--port", "${PORT}"],
       "port": 3000,
       "autoPort": true
     }
