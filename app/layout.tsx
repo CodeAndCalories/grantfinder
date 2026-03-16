@@ -46,6 +46,7 @@ export default function RootLayout({
           </p>
           <div className="footer-inner">
             <a href="/about">About</a>
+            <a href="/guides/grant-writing-101">Grant Writing Guide</a>
             <a href="/privacy">Privacy Policy</a>
             <a href="/terms">Terms</a>
             <a href="/contact">Contact</a>
