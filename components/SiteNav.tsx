@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
-  { href: "/grants",       label: "All Grants" },
+  { href: "/grants",        label: "All Grants" },
   { href: "/financial-help", label: "Financial Help" },
   { href: "/student-grants", label: "Student Grants" },
-  { href: "/saved",        label: "⭐ Saved" },
+  { href: "/saved",         label: "⭐ Saved" },
 ];
 
 const MOBILE_EXTRA = [
@@ -19,6 +19,27 @@ const MOBILE_EXTRA = [
 export default function SiteNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark") {
+      document.documentElement.classList.add("dark");
+      setDark(true);
+    }
+  }, []);
+
+  function toggleDark() {
+    const next = !dark;
+    setDark(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }
 
   function isActive(href: string) {
     return pathname === href || (href !== "/grants" && pathname.startsWith(href));
@@ -38,6 +59,16 @@ export default function SiteNav() {
           </Link>
         ))}
       </nav>
+
+      {/* Dark mode toggle */}
+      <button
+        className="sitenav-darkmode"
+        onClick={toggleDark}
+        aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+        title={dark ? "Switch to light mode" : "Switch to dark mode"}
+      >
+        {dark ? "☀️" : "🌙"}
+      </button>
 
       {/* Mobile hamburger button */}
       <button

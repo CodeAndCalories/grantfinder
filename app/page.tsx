@@ -15,6 +15,19 @@ function toSlug(industry: string): string {
   return industry.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+const CATEGORY_EMOJIS: Record<string, string> = {
+  "Small Business": "💼",
+  "Education": "📚",
+  "Healthcare": "🏥",
+  "Research": "🔬",
+  "Environment": "🌿",
+  "Community": "🏘️",
+  "Housing": "🏠",
+  "Technology": "💻",
+  "Agriculture": "🌾",
+  "Workforce Development": "👷",
+};
+
 export default async function HomePage() {
   const { grants } = await getLiveGrantsPage(1);
   const latest = grants.slice(0, 5);
@@ -22,25 +35,46 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div style={{ textAlign: "center", padding: "3rem 1rem 2.5rem", marginBottom: "2rem" }}>
+      <div style={{ textAlign: "center", padding: "3rem 1rem 1.5rem" }}>
         <h1 style={{ fontSize: "2.25rem", fontWeight: 800, marginBottom: "0.75rem" }}>
           Find Government Grants
         </h1>
-        <p style={{ fontSize: "1.1rem", color: "var(--muted)", maxWidth: "600px", margin: "0 auto 1.75rem", lineHeight: 1.6 }}>
+        <p style={{ fontSize: "1.1rem", color: "var(--muted)", maxWidth: "600px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
           Search 50,000+ active grants and funding opportunities for businesses,
           nonprofits, students, and researchers across the United States.
         </p>
-        <Link
-          href="/grants"
-          className="btn-primary"
-          style={{ display: "inline-block", fontSize: "1rem", padding: "0.75rem 2rem" }}
-        >
-          Browse All Grants →
-        </Link>
+
+        {/* Hero search bar */}
+        <form action="/grants" method="GET" className="hero-search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search grants by keyword, agency, or topic..."
+            className="hero-search-input"
+          />
+          <button type="submit" className="hero-search-btn">Search</button>
+        </form>
+
+        <div style={{ marginTop: "1rem" }}>
+          <Link
+            href="/grants"
+            className="btn-primary"
+            style={{ display: "inline-block", fontSize: "1rem", padding: "0.75rem 2rem" }}
+          >
+            Browse All Grants →
+          </Link>
+        </div>
+      </div>
+
+      {/* Stats bar */}
+      <div className="stats-bar">
+        <span>✓ 900+ Live Federal Grants</span>
+        <span>✓ Updated Every Hour</span>
+        <span>✓ 100% Free — No Account Required</span>
       </div>
 
       {/* Latest Grants */}
-      <section>
+      <section style={{ marginTop: "2rem" }}>
         <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "1rem" }}>
           Latest Grant Opportunities
         </h2>
@@ -69,7 +103,10 @@ export default async function HomePage() {
                 </span>
               </div>
               <div style={{ marginTop: "0.35rem", fontSize: "0.8rem", color: "var(--muted)" }}>
-                {grant.location} &nbsp;·&nbsp; Deadline: {grant.deadline ?? "See listing"}
+                {grant.location} &nbsp;·&nbsp; Deadline:{" "}
+                {grant.deadline
+                  ? new Date(grant.deadline).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                  : "See listing"}
                 {grant.industry_tags.length > 0 && (
                   <> &nbsp;·&nbsp; {grant.industry_tags.slice(0, 2).join(", ")}</>
                 )}
@@ -89,7 +126,7 @@ export default async function HomePage() {
         <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "1rem" }}>
           Browse by Category
         </h2>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+        <div className="category-grid">
           {[
             "Small Business", "Education", "Healthcare", "Research",
             "Environment", "Community", "Housing", "Technology",
@@ -98,12 +135,14 @@ export default async function HomePage() {
             <Link
               key={cat}
               href={`/grants/${toSlug(cat)}`}
-              className="tag"
-              style={{ textDecoration: "none" }}
+              className="category-card"
             >
-              {cat}
+              <span className="category-card-emoji">{CATEGORY_EMOJIS[cat] ?? "📋"}</span>
+              <span className="category-card-label">{cat}</span>
             </Link>
           ))}
+        </div>
+        <div style={{ marginTop: "1rem" }}>
           <Link href="/grants/industry" className="tag" style={{ textDecoration: "none", fontWeight: 600 }}>
             All Industries →
           </Link>
