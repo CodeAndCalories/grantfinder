@@ -1,5 +1,4 @@
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
 import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 import GrantCard from "@/components/GrantCard";
 import type { Metadata } from "next";

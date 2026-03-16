@@ -1,5 +1,4 @@
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
 import { getLiveGrantsPage } from "@/lib/fetchLiveGrants";
 import GrantMatchWizard from "@/components/GrantMatchWizard";
 import type { Metadata } from "next";
