@@ -53,17 +53,6 @@ export default function RootLayout({
             <a href="/terms">Terms</a>
             <a href="/contact">Contact</a>
           </div>
-          <div className="footer-inner">
-            <a href="/grants/closing-soon">Grants Closing Soon</a>
-            <a href="/grants/due-this-week">Grants Due This Week</a>
-            <a href="/grants/due-this-month">Grants Due This Month</a>
-          </div>
-          <div className="footer-inner">
-            <a href="/grant-match">Find My Grants</a>
-            <a href="/grants-for-students">Grants for Students</a>
-            <a href="/grants-for-small-business">Small Business Grants</a>
-            <a href="/grants-for-nonprofits">Nonprofit Grants</a>
-          </div>
         </footer>
       </body>
     </html>

@@ -7,7 +7,6 @@ import { useState } from "react";
 const NAV_LINKS = [
   { href: "/grants",       label: "All Grants" },
   { href: "/financial-help", label: "Financial Help" },
-  { href: "/grant-match",   label: "🎯 Grant Match" },
   { href: "/student-grants", label: "Student Grants" },
   { href: "/saved",        label: "⭐ Saved" },
 ];
