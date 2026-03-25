@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthorBio from "@/components/AuthorBio";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -144,6 +145,7 @@ export default function MicroGrantsForStartups2026() {
       <p className="text-sm italic mt-8">
         Disclaimer: This guide is for educational purposes. GrantLocate.com does not guarantee funding outcomes.
       </p>
+      <AuthorBio />
     </article>
   );
 }

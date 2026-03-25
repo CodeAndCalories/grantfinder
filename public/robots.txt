@@ -1,5 +1,16 @@
 User-agent: *
 Allow: /
-Disallow: /api/
+Allow: /ads.txt
+Allow: /guides/
 
-Sitemap: https://grantlocate.com/sitemap.xml
+User-agent: Mediapartners-Google
+Allow: /
+Allow: /ads.txt
+
+User-agent: Googlebot
+Allow: /
+Allow: /ads.txt
+
+Disallow: /api/
+Disallow: /admin/
+Sitemap: https://www.grantlocate.com/sitemap.xml

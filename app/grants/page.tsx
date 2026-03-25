@@ -165,8 +165,25 @@ export default async function GrantsPage({ searchParams }: Props) {
       {/* Grant list */}
       {grants.length === 0 ? (
         <div className="empty-state">
-          <h2>No grants found</h2>
-          <p>Try adjusting your filters or search terms.</p>
+          <h2>No exact matches found for your criteria.</h2>
+          <p>Try adjusting your filters or search terms, or explore our funding guides:</p>
+          <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
+            <li style={{ marginBottom: "0.5rem" }}>
+              <Link href="/guides/micro-grants-for-startups-2026" style={{ fontWeight: 600 }}>
+                Micro-Grants for Startups →
+              </Link>
+            </li>
+            <li style={{ marginBottom: "0.5rem" }}>
+              <Link href="/guides/avoid-grant-scams-2026" style={{ fontWeight: 600 }}>
+                Avoid Grant Scams →
+              </Link>
+            </li>
+            <li style={{ marginBottom: "0.5rem" }}>
+              <Link href="/guides/small-business-grant-roadmap-2026" style={{ fontWeight: 600 }}>
+                Small Business Roadmap →
+              </Link>
+            </li>
+          </ul>
         </div>
       ) : (
         <div className="grants-list">

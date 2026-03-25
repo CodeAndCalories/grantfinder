@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthorBio from "@/components/AuthorBio";
 export default function GrantScamsGuide() {
   return (
     <article className="max-w-4xl mx-auto px-4 py-12 prose prose-slate lg:prose-xl">
@@ -31,6 +32,7 @@ export default function GrantScamsGuide() {
           <strong> ReportFraud.ftc.gov</strong> or call 1-877-FTC-HELP.
         </p>
       </div>
+      <AuthorBio />
     </article>
   );
 }

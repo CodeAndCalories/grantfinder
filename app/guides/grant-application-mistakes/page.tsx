@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthorBio from "@/components/AuthorBio";
 export default function GrantMistakesGuide() {
   return (
     <article className="max-w-4xl mx-auto px-4 py-12 prose prose-slate lg:prose-xl">
@@ -32,6 +33,7 @@ export default function GrantMistakesGuide() {
         Technical glitches are common. Aim to submit your application at least 48 hours before the
         official deadline to ensure your materials are received without issue.
       </p>
+      <AuthorBio />
     </article>
   );
 }

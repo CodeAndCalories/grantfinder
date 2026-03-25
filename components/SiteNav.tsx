@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: "/grants",        label: "All Grants" },
   { href: "/financial-help", label: "Financial Help" },
   { href: "/student-grants", label: "Student Grants" },
+  { href: "/guides",        label: "Funding Guides" },
   { href: "/saved",         label: "⭐ Saved" },
 ];
 

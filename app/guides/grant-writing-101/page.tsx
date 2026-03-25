@@ -1,5 +1,6 @@
 import React from 'react';
 import EligibilityChecklist from "@/components/EligibilityChecklist";
+import AuthorBio from "@/components/AuthorBio";
 export default function GrantWritingGuide() {
   return (
     <article className="max-w-4xl mx-auto px-4 py-12 prose prose-slate lg:prose-xl">
@@ -39,6 +40,7 @@ export default function GrantWritingGuide() {
         Disclaimer: This guide is for educational purposes. GrantLocate.com does not guarantee funding outcomes.
       </p>
       <EligibilityChecklist />
+      <AuthorBio />
     </article>
   );
 }

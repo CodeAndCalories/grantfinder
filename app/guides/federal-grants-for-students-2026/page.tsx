@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthorBio from "@/components/AuthorBio";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -130,6 +131,7 @@ export default function FederalGrantsForStudents2026() {
       <p className="text-sm italic mt-8">
         Disclaimer: This guide is for educational purposes. Award amounts referenced are subject to annual federal appropriations. GrantLocate.com does not guarantee funding outcomes.
       </p>
+      <AuthorBio />
     </article>
   );
 }
