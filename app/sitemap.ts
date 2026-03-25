@@ -30,6 +30,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://grantlocate.com/guides/grant-writing-101', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: 'https://grantlocate.com/guides/avoiding-grant-scams', lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: 'https://grantlocate.com/guides/grant-application-mistakes', lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: 'https://grantlocate.com/guides/avoid-grant-scams-2026', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: 'https://grantlocate.com/guides/small-business-grant-roadmap-2026', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: 'https://grantlocate.com/guides/federal-grants-for-students-2026', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: 'https://grantlocate.com/guides/grant-writing-plain-language-2026', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: 'https://grantlocate.com/guides/micro-grants-for-startups-2026', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
   ];
 
   // Industry pages — /grants/[industry]
